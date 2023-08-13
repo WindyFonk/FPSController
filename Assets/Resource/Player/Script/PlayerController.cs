@@ -19,7 +19,7 @@ namespace FPS.Player
         [SerializeField] float mouseSensitive = 21f;
 
         [SerializeField] GameObject cameraArm;
-        [SerializeField] SkinnedMeshRenderer[] modelArm;
+        [SerializeField] GameObject weaponRoot;
         [SerializeField] Animator cameraArmAnimator;
 
 
@@ -45,6 +45,9 @@ namespace FPS.Player
         public bool equipWeaon = false;
         private bool buttonPressed = false;
 
+        private int PlayerAnimatorLayer;
+        private float LayerWeightVelocity;
+
 
 
         void Start()
@@ -57,6 +60,8 @@ namespace FPS.Player
             _Xvelocity = Animator.StringToHash("X_Velocity");
             _Yvelocity = Animator.StringToHash("Y_Velocity");
             _EquipWeapon = Animator.StringToHash("Equip_Weapon");
+
+            PlayerAnimatorLayer = animator.GetLayerIndex("Pistol_Layer");
         }
 
         private void FixedUpdate()
@@ -64,7 +69,7 @@ namespace FPS.Player
             if (!canControl) return;
             Move();
             EquipWeapon();
-            SetArm();
+            UseWeapon();
         }
 
         private void LateUpdate()
@@ -75,16 +80,16 @@ namespace FPS.Player
         private void Move()
         {
             if (!_hasAnimator) return;
-            float speed;
-            //float speed = inputManager.Run ? runSpeed : walkSpeed;
-            if (inputManager.Run && inputManager.Move.y==1)
+            float speed = inputManager.Run ? runSpeed : walkSpeed;
+            cameraArmAnimator.SetFloat("Speed", speed);
+            /*if (inputManager.Run && inputManager.Move.y==1)
             {
                 speed = runSpeed;
             }
             else
             {
                 speed = walkSpeed;
-            }
+            }*/
             
             if (inputManager.Move == Vector2.zero) speed = 0.1f;
 
@@ -128,7 +133,25 @@ namespace FPS.Player
 
         private void SetArm()
         {
-            cameraArm.SetActive(equipWeaon);
+            if (equipWeaon)
+            {
+                cameraArm.SetActive(equipWeaon);
+                animator.SetLayerWeight(PlayerAnimatorLayer, 1);
+
+            }
+            else
+            {
+                StartCoroutine(Armanim());
+                animator.SetLayerWeight(PlayerAnimatorLayer, 0);
+
+            }
+        }
+
+        private IEnumerator Armanim()
+        {
+            yield return new WaitForSeconds(1);
+            cameraArm.SetActive(false);
+            weaponRoot.SetActive(equipWeaon);
         }
 
 
@@ -138,9 +161,9 @@ namespace FPS.Player
             if (!inputManager.Equip) return;
             if (buttonPressed) return;
             buttonPressed = true;
-
-
             equipWeaon = !equipWeaon;
+            SetArm();
+
             animator.SetBool(_EquipWeapon, equipWeaon);
             cameraArmAnimator.SetBool(_EquipWeapon, equipWeaon);
             StartCoroutine(WaitTilNextPress(0.5f));
@@ -162,14 +185,26 @@ namespace FPS.Player
             else if (inputManager.Knife) { 
                 StartCoroutine(Weapon("Knife"));
             }
+
+            if (inputManager.Reload)
+            {
+                StartCoroutine(Weapon("ReloadFull"));
+            }
+
             else return;
         }
 
         private IEnumerator Weapon(string weapon)
         {
-            cameraArmAnimator.SetTrigger(weapon);
+            cameraArmAnimator.Play(weapon);
             yield return new WaitForSeconds(0.2f);
-            cameraArmAnimator.ResetTrigger(weapon);
+            //cameraArmAnimator.ResetTrigger(weapon);
+        }
+
+        public void setControl(bool canControl)
+        {
+            this.canControl = canControl;
+            GetComponent<Collider>().enabled = canControl;
         }
     }
 }

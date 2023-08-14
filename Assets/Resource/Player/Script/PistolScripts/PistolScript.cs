@@ -47,14 +47,10 @@ public class PistolScript : MonoBehaviour
         if (currentBullet > 0)
         {
             currentBullet--;
-
-            // Tính toán góc lệch ngẫu nhiên cho tia raycast
+           
+            // Tạo độ lệch ngẫu nhiên khi bắn
             float randomSpread = Random.Range(-bulletSpreadAngle / 2, bulletSpreadAngle / 2);
-
-            // Tạo một quaternion xoay theo trục Y với góc ngẫu nhiên
             Quaternion rotation = Quaternion.Euler(0, randomSpread, 0);
-
-            // Tính toán hướng tia raycast dựa trên hướng súng và góc lệch
             Vector3 rayDirection = rotation * gunPivot.transform.forward;
 
             // Bắn một Raycast từ vị trí súng

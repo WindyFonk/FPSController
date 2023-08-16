@@ -26,13 +26,13 @@ public class PistolScript : MonoBehaviour
         damage = 10f;
         maxBullet = 15;
 
-        bulletSpreadAngle = 1;
+        bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
     }
 
     private void Update()
     {
-     
+        animator.SetInteger("Bullet", currentBullet);
     }
 
     public void Reload()
@@ -47,16 +47,12 @@ public class PistolScript : MonoBehaviour
         if (currentBullet > 0)
         {
             currentBullet--;
-           
-            // Tạo độ lệch ngẫu nhiên khi bắn
-            float randomSpread = Random.Range(-bulletSpreadAngle / 2, bulletSpreadAngle / 2);
-            Quaternion rotation = Quaternion.Euler(0, randomSpread, 0);
-            Vector3 rayDirection = rotation * gunPivot.transform.forward;
 
-            // Bắn một Raycast từ vị trí súng
+            // Bắn một Raycast từ vị trí camera
             RaycastHit hit;
             if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange))
             {
+                Debug.DrawRay(gunPivot.transform.position, gunPivot.transform.forward * hit.distance, Color.green);
                 Debug.Log(hit.transform.name);
 
                 TargetScript target = hit.transform.GetComponent<TargetScript>();
@@ -67,8 +63,7 @@ public class PistolScript : MonoBehaviour
                     Debug.Log(">>> damage: " + damage);
                 }
             }
-            animator.SetInteger("Bullet", currentBullet);
+            
         }
-       
     }
 }

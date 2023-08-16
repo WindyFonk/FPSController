@@ -197,7 +197,7 @@ namespace FPS.Player
 
             if (inputManager.Reload)
             {
-                StartCoroutine(Weapon("ReloadFull"));
+                StartCoroutine(Weapon("Reload"));
             }
 
             else return;
@@ -205,9 +205,10 @@ namespace FPS.Player
 
         private IEnumerator Weapon(string weapon)
         {
-            cameraArmAnimator.Play(weapon);
+            //cameraArmAnimator.Play(weapon);
+            cameraArmAnimator.SetTrigger(weapon);
             yield return new WaitForSeconds(0.2f);
-            //cameraArmAnimator.ResetTrigger(weapon);
+            cameraArmAnimator.ResetTrigger(weapon);
         }
 
         public void setControl(bool canControl)

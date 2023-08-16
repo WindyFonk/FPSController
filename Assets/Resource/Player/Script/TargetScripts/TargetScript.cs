@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class TargetScript : MonoBehaviour
 {
-    public float health = 50f;
+    public float health;
 
+    private void Start()
+    {
+        health = 1000f;
+    }
     public void TakeDamage (float amount)
     {
         health -= amount;

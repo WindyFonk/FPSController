@@ -13,7 +13,11 @@ public class PistolScript : MonoBehaviour
 
     public float bulletSpreadAngle;
 
+    public ParticleSystem muzzleFlash;
+    public GameObject impactEffect;
+
     private Animator animator;
+
 
     private void Awake()
     {
@@ -46,6 +50,7 @@ public class PistolScript : MonoBehaviour
     {
         if (currentBullet > 0)
         {
+            muzzleFlash.Play();
             currentBullet--;
 
             // Bắn một Raycast từ vị trí camera
@@ -62,6 +67,8 @@ public class PistolScript : MonoBehaviour
                     target.TakeDamage(damage);
                     Debug.Log(">>> damage: " + damage);
                 }
+
+                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal)), 2f);
             }
             
         }

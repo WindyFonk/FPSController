@@ -68,7 +68,7 @@ public class PistolScript : MonoBehaviour
                     Debug.Log(">>> damage: " + damage);
                 }
 
-                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal)), 2f);
+                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 2f);
             }
             
         }

@@ -29,6 +29,10 @@ namespace FPS.Player
         private Animator animator;
         private bool _hasAnimator;
 
+        // Pistol Script funtion
+        private PistolScript pistolScript;
+
+
         private int _Xvelocity, _Yvelocity;
         private int _EquipWeapon;
 
@@ -62,6 +66,9 @@ namespace FPS.Player
             _EquipWeapon = Animator.StringToHash("Equip_Weapon");
 
             PlayerAnimatorLayer = animator.GetLayerIndex("Pistol_Layer");
+
+            // 
+            pistolScript = GetComponent<PistolScript>();
         }
 
         private void FixedUpdate()
@@ -161,34 +168,36 @@ namespace FPS.Player
             if (!inputManager.Equip) return;
             if (buttonPressed) return;
             buttonPressed = true;
+
             equipWeaon = !equipWeaon;
             SetArm();
 
             animator.SetBool(_EquipWeapon, equipWeaon);
             cameraArmAnimator.SetBool(_EquipWeapon, equipWeaon);
+            
             StartCoroutine(WaitTilNextPress(0.5f));
         }
 
         IEnumerator WaitTilNextPress(float seconds)
         {
-            yield return new WaitForSeconds(seconds);
+            yield return new WaitForSeconds(seconds);       
             buttonPressed = false;
         }
 
         private void UseWeapon()
         {
             if (!equipWeaon) return;
-            if (inputManager.Shoot)
-            {
-                StartCoroutine(Weapon("Shoot"));
+            if (inputManager.Shoot) { 
+                StartCoroutine(Weapon("Shoot"));   
             }
+
             else if (inputManager.Knife) { 
                 StartCoroutine(Weapon("Knife"));
             }
 
             if (inputManager.Reload)
             {
-                StartCoroutine(Weapon("ReloadFull"));
+                StartCoroutine(Weapon("Reload"));
             }
 
             else return;
@@ -196,9 +205,10 @@ namespace FPS.Player
 
         private IEnumerator Weapon(string weapon)
         {
-            cameraArmAnimator.Play(weapon);
+            //cameraArmAnimator.Play(weapon);
+            cameraArmAnimator.SetTrigger(weapon);
             yield return new WaitForSeconds(0.2f);
-            //cameraArmAnimator.ResetTrigger(weapon);
+            cameraArmAnimator.ResetTrigger(weapon);
         }
 
         public void setControl(bool canControl)

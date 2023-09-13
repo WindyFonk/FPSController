@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PistolScript : MonoBehaviour
@@ -16,12 +18,31 @@ public class PistolScript : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
 
+    public LayerMask hitLayer;
+
     private Animator animator;
 
+    public Transform shellPoint;
+    public GameObject shell;
+
+    public Transform magPoint;
+    public GameObject mag;
+
+    public Camera _camera;
+    public float fov = 68;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+    }
+
+    public bool canReload()
+    {
+        if (currentBullet < maxBullet)
+        {
+            return true;
+        }
+        return false;
     }
 
     private void Start()
@@ -37,13 +58,22 @@ public class PistolScript : MonoBehaviour
     private void Update()
     {
         animator.SetInteger("Bullet", currentBullet);
+        _camera.fieldOfView = fov;
+
     }
 
     public void Reload()
     {
         currentBullet = maxBullet;
-        Debug.Log(">>> Reload mag !");
-        Debug.Log(">>> currentBullet after reload: " + currentBullet);
+    }
+
+    public void EjectMag()
+    {
+        GameObject magEject = Instantiate(mag, magPoint);
+        magEject.transform.SetParent(null);
+        magEject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        magEject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        Destroy(magEject, 10f);
     }
 
     public void Fire()
@@ -55,7 +85,7 @@ public class PistolScript : MonoBehaviour
 
             // Bắn một Raycast từ vị trí camera
             RaycastHit hit;
-            if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange))
+            if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange, hitLayer))
             {
                 Debug.DrawRay(gunPivot.transform.position, gunPivot.transform.forward * hit.distance, Color.green);
                 Debug.Log(hit.transform.name);
@@ -65,12 +95,21 @@ public class PistolScript : MonoBehaviour
                 if (target != null)
                 {
                     target.TakeDamage(damage);
-                    Debug.Log(">>> damage: " + damage);
                 }
 
-                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 2f);
+                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 10f);
             }
-            
+
+
         }
+    }
+
+    public void EjectShell()
+    {
+        GameObject bulletShell = Instantiate(shell, shellPoint);
+        Vector3 force = transform.up + transform.right * 25f * UnityEngine.Random.Range(2f, 5f);
+        bulletShell.GetComponent<Rigidbody>().AddForce(force);
+        bulletShell.transform.SetParent(null);
+        Destroy(bulletShell, 10f);
     }
 }

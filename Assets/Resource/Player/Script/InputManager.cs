@@ -13,15 +13,18 @@ namespace FPS.Manager
         public Vector2 Look { get; set; }
         public bool Run { get; set; }
         public bool Jump { get; set; }
+        public bool Crouch { get; set; }
         public bool Kick { get; set; }
         public bool Equip { get; set; }
         public bool Shoot { get; set; }
         public bool Knife { get; set; }
         public bool Reload { get; set; }
+        public bool Aim { get; set; }
 
         private InputActionMap _currentMap;
         private InputAction _moveAction;
         private InputAction _JumpAction;
+        private InputAction _crouchAction;
         private InputAction _lookAction;
         private InputAction _runAction;
         private InputAction _kickAction;
@@ -29,6 +32,7 @@ namespace FPS.Manager
         private InputAction _shootAction;
         private InputAction _knifeAction;
         private InputAction _reloadAction;
+        private InputAction _aimAction;
 
         private void Awake()
         {
@@ -36,25 +40,30 @@ namespace FPS.Manager
             _moveAction = _currentMap.FindAction("Move");
             _lookAction = _currentMap.FindAction("Look");
             _JumpAction = _currentMap.FindAction("Jump");
+            _crouchAction = _currentMap.FindAction("Crouch");
             _runAction = _currentMap.FindAction("Run");
             _kickAction = _currentMap.FindAction("Kick");
             _equipAction = _currentMap.FindAction("Equip");
             _shootAction = _currentMap.FindAction("Shoot");
             _knifeAction = _currentMap.FindAction("Knife");
             _reloadAction = _currentMap.FindAction("Reload");
+            _aimAction = _currentMap.FindAction("Aim");
 
             _moveAction.performed += onMove;
             _lookAction.performed += onLook;
             _JumpAction.performed += onJump;
+            _crouchAction.performed += onCrouch;
             _runAction.performed += onRun;
             _kickAction.performed += onKick;
             _equipAction.started += onEquip;
             _shootAction.started += onShoot;
             _knifeAction.started += onKnife;
             _reloadAction.started += onReload;
+            _aimAction.started += onAim;
 
             _moveAction.canceled += onMove;
             _JumpAction.canceled += onJump;
+            _crouchAction.canceled += onCrouch;
             _lookAction.canceled += onLook;
             _runAction.canceled += onRun;
             _kickAction.canceled += onKick;
@@ -62,6 +71,7 @@ namespace FPS.Manager
             _shootAction.canceled += onShoot;
             _knifeAction.canceled += onKnife;
             _reloadAction.canceled += onReload;
+            _aimAction.canceled += onAim;
 
         }
 
@@ -100,12 +110,21 @@ namespace FPS.Manager
         {
             Knife = context.ReadValueAsButton();
         }
-        
+
         private void onReload(InputAction.CallbackContext context)
         {
             Reload = context.ReadValueAsButton();
         }
 
+        private void onCrouch(InputAction.CallbackContext context)
+        {
+            Crouch = context.ReadValueAsButton();
+        }
+        
+        private void onAim(InputAction.CallbackContext context)
+        {
+            Aim = context.ReadValueAsButton();
+        }
 
 
         private void OnEnable()

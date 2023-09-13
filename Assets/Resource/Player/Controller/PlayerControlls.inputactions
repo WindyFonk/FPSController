@@ -48,7 +48,7 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Kick",
@@ -90,6 +90,15 @@
                     "name": "Reload",
                     "type": "Button",
                     "id": "21348b5a-c226-468b-bb0e-d65227db5b99",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "d8664f6e-3882-4cd7-9ec1-048c1835a80c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -243,8 +252,8 @@
                 {
                     "name": "",
                     "id": "54ec0aa2-e2d3-451c-b2bc-64e9eec4fa6c",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
+                    "path": "<Keyboard>/c",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
@@ -309,7 +318,7 @@
                 {
                     "name": "",
                     "id": "d84d118a-e631-4f32-937b-4cf524625f0e",
-                    "path": "<Keyboard>/v",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -321,7 +330,7 @@
                     "name": "",
                     "id": "193678ba-94c7-4ec2-ae08-7434efd9bb36",
                     "path": "<Keyboard>/r",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": "",
                     "action": "Reload",
@@ -336,6 +345,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0545d106-5a85-4539-bb88-dabdc149766d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

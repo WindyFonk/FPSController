@@ -1,8 +1,12 @@
+<<<<<<< Updated upstream
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+=======
+﻿using UnityEngine;
+>>>>>>> Stashed changes
 
 public class PistolScript : MonoBehaviour
 {
@@ -22,6 +26,7 @@ public class PistolScript : MonoBehaviour
 
     private Animator animator;
 
+<<<<<<< Updated upstream
     public Transform shellPoint;
     public GameObject shell;
 
@@ -30,6 +35,10 @@ public class PistolScript : MonoBehaviour
 
     public Camera _camera;
     public float fov = 68;
+=======
+    [Header("Recoil system")]
+    private RecoilScript recoilScript;
+>>>>>>> Stashed changes
 
     private void Awake()
     {
@@ -53,6 +62,10 @@ public class PistolScript : MonoBehaviour
 
         bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
+
+        // recoil system
+        recoilScript = gameObject.GetComponent<RecoilScript>();
+        Debug.Log(">>> recoilScript: " + recoilScript);
     }
 
     private void Update()
@@ -81,10 +94,20 @@ public class PistolScript : MonoBehaviour
     {
         if (currentBullet > 0)
         {
+
             muzzleFlash.Play();
             currentBullet--;
 
-            // Bắn một Raycast từ vị trí camera
+            recoilScript.RecoilFire();
+
+            // random x and y from z
+            //float randomSpreadX = Random.Range(-2.0f, 2.0f);
+            //float randomSpreadY = Random.Range(-2.0f, 2.0f);
+
+            //Quaternion spreadRotation = Quaternion.Euler(randomSpreadX, randomSpreadY, 0);
+
+            //Vector3 rayDirection = spreadRotation * gunPivot.transform.forward;
+
             RaycastHit hit;
             if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange, hitLayer))
             {

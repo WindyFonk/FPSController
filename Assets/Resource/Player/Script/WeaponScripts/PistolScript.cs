@@ -65,6 +65,7 @@ public class PistolScript : MonoBehaviour
     public void Reload()
     {
         currentBullet = maxBullet;
+
     }
 
     public void EjectMag()

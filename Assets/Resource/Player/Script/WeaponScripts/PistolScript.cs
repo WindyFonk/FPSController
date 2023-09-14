@@ -1,12 +1,10 @@
-<<<<<<< Updated upstream
+
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-=======
-﻿using UnityEngine;
->>>>>>> Stashed changes
+
 
 public class PistolScript : MonoBehaviour
 {
@@ -26,7 +24,6 @@ public class PistolScript : MonoBehaviour
 
     private Animator animator;
 
-<<<<<<< Updated upstream
     public Transform shellPoint;
     public GameObject shell;
 
@@ -35,10 +32,7 @@ public class PistolScript : MonoBehaviour
 
     public Camera _camera;
     public float fov = 68;
-=======
-    [Header("Recoil system")]
-    private RecoilScript recoilScript;
->>>>>>> Stashed changes
+
 
     private void Awake()
     {
@@ -63,9 +57,7 @@ public class PistolScript : MonoBehaviour
         bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
 
-        // recoil system
-        recoilScript = gameObject.GetComponent<RecoilScript>();
-        Debug.Log(">>> recoilScript: " + recoilScript);
+
     }
 
     private void Update()
@@ -97,8 +89,6 @@ public class PistolScript : MonoBehaviour
 
             muzzleFlash.Play();
             currentBullet--;
-
-            recoilScript.RecoilFire();
 
             // random x and y from z
             //float randomSpreadX = Random.Range(-2.0f, 2.0f);

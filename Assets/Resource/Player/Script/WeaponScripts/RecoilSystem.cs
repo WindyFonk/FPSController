@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RecoilSystem : MonoBehaviour
 {
+
+    public Transform CameraRoot;
+
     // rotations
     private Vector3 currentRotation;
     private Vector3 targetRotation;
@@ -20,11 +23,7 @@ public class RecoilSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        recoilX = -2f;
-        recoilY = 2f;
-        recoilZ = 0.35f;
-        snappiness = 6.0f;
-        returnSpeed = 2.0f;
+
     }
 
     // Update is called once per frame
@@ -38,6 +37,5 @@ public class RecoilSystem : MonoBehaviour
     public void RecoilFire()
     {
         targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
-
     }
 }

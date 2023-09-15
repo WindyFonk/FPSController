@@ -34,8 +34,6 @@ public class PistolScript : MonoBehaviour
     [Header("Recoil system")]
     private RecoilSystem recoilSystem;
 
-
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -58,12 +56,15 @@ public class PistolScript : MonoBehaviour
 
         bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
+        Debug.Log(">>> currentBullet: " + currentBullet);
 
-        recoilSystem = transform.Find("CameraRot/CameraRecoil").GetComponent<RecoilSystem>();
+        recoilSystem = GameObject.Find("Main Camera/CameraRot/CameraRecoil").GetComponent<RecoilSystem>();
+        Debug.Log(">>> recoilSystem: " + recoilSystem);
     }
 
     private void Update()
     {
+       
         animator.SetInteger("Bullet", currentBullet);
         _camera.fieldOfView = fov;
 
@@ -80,7 +81,7 @@ public class PistolScript : MonoBehaviour
         magEject.transform.SetParent(null);
         magEject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         magEject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        Destroy(magEject, 10f);
+        Destroy(magEject, 5f);
     }
 
     public void Fire()
@@ -89,11 +90,14 @@ public class PistolScript : MonoBehaviour
         {
             muzzleFlash.Play();
             currentBullet--;
+
             recoilSystem.RecoilFire();
+
             // Bắn một Raycast từ vị trí camera
             RaycastHit hit;
             if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange, hitLayer))
             {
+                
                 Debug.DrawRay(gunPivot.transform.position, gunPivot.transform.forward * hit.distance, Color.green);
                 Debug.Log(hit.transform.name);
 
@@ -106,8 +110,6 @@ public class PistolScript : MonoBehaviour
 
                 Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 10f);
             }
-
-
         }
     }
 
@@ -117,6 +119,6 @@ public class PistolScript : MonoBehaviour
         Vector3 force = transform.up + transform.right * 25f * UnityEngine.Random.Range(2f, 5f);
         bulletShell.GetComponent<Rigidbody>().AddForce(force);
         bulletShell.transform.SetParent(null);
-        Destroy(bulletShell, 10f);
+        Destroy(bulletShell, 3f);
     }
 }

@@ -31,6 +31,11 @@ public class PistolScript : MonoBehaviour
     public Camera _camera;
     public float fov = 68;
 
+    [Header("Recoil system")]
+    private RecoilSystem recoilSystem;
+
+
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -53,6 +58,8 @@ public class PistolScript : MonoBehaviour
 
         bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
+
+        recoilSystem = transform.Find("CameraRot/CameraRecoil").GetComponent<RecoilSystem>();
     }
 
     private void Update()
@@ -82,7 +89,7 @@ public class PistolScript : MonoBehaviour
         {
             muzzleFlash.Play();
             currentBullet--;
-
+            recoilSystem.RecoilFire();
             // Bắn một Raycast từ vị trí camera
             RaycastHit hit;
             if (Physics.Raycast(gunPivot.transform.position, gunPivot.transform.forward, out hit, maxRange, hitLayer))

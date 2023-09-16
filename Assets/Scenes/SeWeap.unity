@@ -1121,10 +1121,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraRoot: {fileID: 7795869472498556289}
-  recoilX: -3
-  recoilY: 3
-  recoilZ: 0.5
-  snappiness: 6
+  recoilX: -4
+  recoilY: 4
+  recoilZ: 0.8
+  snappiness: 7
   returnSpeed: 5
 --- !u!1 &1659736292
 GameObject:

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,7 +16,9 @@ namespace FPS.Manager
         public bool Jump { get; set; }
         public bool Crouch { get; set; }
         public bool Kick { get; set; }
-        public bool Equip { get; set; }
+        public bool EquipPrimary { get; set; }
+        public bool EquipSecondary { get; set; }
+        public bool EquipMelee { get; set; }
         public bool Shoot { get; set; }
         public bool Knife { get; set; }
         public bool Reload { get; set; }
@@ -28,7 +31,9 @@ namespace FPS.Manager
         private InputAction _lookAction;
         private InputAction _runAction;
         private InputAction _kickAction;
-        private InputAction _equipAction;
+        private InputAction _equipPrimaryAction;
+        private InputAction _equipSecondaryAction;
+        private InputAction _equipMeleeAction;
         private InputAction _shootAction;
         private InputAction _knifeAction;
         private InputAction _reloadAction;
@@ -43,7 +48,8 @@ namespace FPS.Manager
             _crouchAction = _currentMap.FindAction("Crouch");
             _runAction = _currentMap.FindAction("Run");
             _kickAction = _currentMap.FindAction("Kick");
-            _equipAction = _currentMap.FindAction("Equip");
+            _equipPrimaryAction = _currentMap.FindAction("Primary");
+            _equipSecondaryAction = _currentMap.FindAction("Secondary");
             _shootAction = _currentMap.FindAction("Shoot");
             _knifeAction = _currentMap.FindAction("Knife");
             _reloadAction = _currentMap.FindAction("Reload");
@@ -55,7 +61,8 @@ namespace FPS.Manager
             _crouchAction.performed += onCrouch;
             _runAction.performed += onRun;
             _kickAction.performed += onKick;
-            _equipAction.started += onEquip;
+            _equipPrimaryAction.started += onEquipPrimary;
+            _equipSecondaryAction.started += onEquipSecondary;
             _shootAction.started += onShoot;
             _knifeAction.started += onKnife;
             _reloadAction.started += onReload;
@@ -67,7 +74,8 @@ namespace FPS.Manager
             _lookAction.canceled += onLook;
             _runAction.canceled += onRun;
             _kickAction.canceled += onKick;
-            _equipAction.canceled += onEquip;
+            _equipPrimaryAction.canceled += onEquipPrimary;
+            _equipSecondaryAction.canceled += onEquipSecondary;
             _shootAction.canceled += onShoot;
             _knifeAction.canceled += onKnife;
             _reloadAction.canceled += onReload;
@@ -98,9 +106,13 @@ namespace FPS.Manager
             Jump = context.ReadValueAsButton();
         }
 
-        private void onEquip(InputAction.CallbackContext context)
+        private void onEquipPrimary(InputAction.CallbackContext context)
         {
-            Equip = context.ReadValueAsButton();
+            EquipPrimary = context.ReadValueAsButton();
+        }
+        private void onEquipSecondary(InputAction.CallbackContext context)
+        {
+            EquipSecondary = context.ReadValueAsButton();
         }
         private void onShoot(InputAction.CallbackContext context)
         {

@@ -1,16 +1,20 @@
-﻿using System;
+﻿using FPS.Manager;
+using FPS.Player;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PistolScript : MonoBehaviour
 {
+    [SerializeField] InputManager inputManager;
     public Transform gunPivot;
-    public int maxRange;
-    public float damage;
+    public int maxRange = 100;
+    public float damage = 10;
 
-    public int maxBullet;
+    public int maxBullet = 8;
     public int currentBullet;
 
     public float bulletSpreadAngle;
@@ -33,6 +37,9 @@ public class PistolScript : MonoBehaviour
 
     [Header("Recoil system")]
     private RecoilSystem recoilSystem;
+    public Animator modelAnimator;
+
+    public PlayerController player;
 
     private void Awake()
     {
@@ -50,11 +57,6 @@ public class PistolScript : MonoBehaviour
 
     private void Start()
     {
-        maxRange = 100;
-        damage = 10f;
-        maxBullet = 15;
-
-        bulletSpreadAngle = 0.15f;
         currentBullet = maxBullet;
         Debug.Log(">>> currentBullet: " + currentBullet);
 
@@ -64,11 +66,71 @@ public class PistolScript : MonoBehaviour
 
     private void Update()
     {
-       
+        animator.SetFloat("Speed", Mathf.Abs(player.currentVelocity.y));
+
         animator.SetInteger("Bullet", currentBullet);
         _camera.fieldOfView = fov;
 
+        UseWeapon();
+        AimDownSight();
+
     }
+
+    private void UseWeapon()
+    {
+        if (inputManager.Shoot)
+        {
+            StartCoroutine(Weapon("Shoot"));
+        }
+
+        else if (inputManager.Knife)
+        {
+            StartCoroutine(Weapon("Knife"));
+        }
+
+        if (inputManager.Reload)
+        {
+            StartCoroutine(Weapon("Reload"));
+        }
+
+        else return;
+    }
+
+    private IEnumerator Weapon(string weapon)
+    {
+        //cameraArmAnimator.Play(weapon);
+        animator.SetTrigger(weapon);
+        modelAnimator.SetTrigger(weapon);
+        yield return new WaitForSeconds(0.1f);
+        animator.ResetTrigger(weapon);
+        modelAnimator.ResetTrigger(weapon);
+    }
+
+
+    private void AimDownSight()
+    {
+        if (inputManager.Aim)
+        {
+            Aim();
+        }
+        else
+        {
+            StartCoroutine(Unaim());
+        }
+    }
+
+    private void Aim()
+    {
+        animator.SetBool("Aim", true);
+    }
+
+    private IEnumerator Unaim()
+    {
+        animator.SetBool("Aim", false);
+        yield return new WaitForSeconds(1f);
+    }
+
+
 
     public void Reload()
     {

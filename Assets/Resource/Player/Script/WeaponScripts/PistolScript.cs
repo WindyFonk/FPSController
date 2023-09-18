@@ -5,14 +5,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.Windows;
 
 public class PistolScript : MonoBehaviour
 {
     [SerializeField] InputManager inputManager;
     public Transform gunPivot;
-    public int maxRange = 100;
-    public float damage = 10;
+    public int maxRange;
+    public float damage;
+    public float impactForce;
+    public float fireRate;
+    private float lastFireTime;
 
     public int maxBullet = 8;
     public int currentBullet;
@@ -35,8 +39,6 @@ public class PistolScript : MonoBehaviour
     public Camera _camera;
     public float fov = 68;
 
-    [Header("Recoil system")]
-    private RecoilSystem recoilSystem;
     public Animator modelAnimator;
 
     public PlayerController player;
@@ -59,9 +61,7 @@ public class PistolScript : MonoBehaviour
     {
         currentBullet = maxBullet;
         Debug.Log(">>> currentBullet: " + currentBullet);
-
-        recoilSystem = GameObject.Find("Main Camera/CameraRot/CameraRecoil").GetComponent<RecoilSystem>();
-        Debug.Log(">>> recoilSystem: " + recoilSystem);
+             
     }
 
     private void Update()
@@ -148,12 +148,10 @@ public class PistolScript : MonoBehaviour
 
     public void Fire()
     {
-        if (currentBullet > 0)
+        if (Time.time - lastFireTime >= fireRate && currentBullet > 0)
         {
             muzzleFlash.Play();
             currentBullet--;
-
-            recoilSystem.RecoilFire();
 
             // Bắn một Raycast từ vị trí camera
             RaycastHit hit;
@@ -170,7 +168,14 @@ public class PistolScript : MonoBehaviour
                     target.TakeDamage(damage);
                 }
 
-                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 10f);
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
+                   
+                Destroy(Instantiate(impactEffect, hit.point, Quaternion.LookRotation(-hit.normal)), 5f);
+
+                lastFireTime = Time.time;
             }
         }
     }
@@ -183,4 +188,31 @@ public class PistolScript : MonoBehaviour
         bulletShell.transform.SetParent(null);
         Destroy(bulletShell, 3f);
     }
+
+    //public void EjectShell()
+    //{
+    //    GameObject bulletShell = PoolForShell.Instance.GetShell();
+
+    //    if (bulletShell != null)
+    //    {
+    //        bulletShell.transform.position = shellPoint.position;
+    //        bulletShell.transform.rotation = shellPoint.rotation;
+    //        bulletShell.SetActive(true);
+
+    //        Rigidbody rb = bulletShell.GetComponent<Rigidbody>();
+    //        rb.velocity = Vector3.zero;
+    //        rb.angularVelocity = Vector3.zero;
+
+    //        Vector3 force = transform.up + transform.right * 25f * UnityEngine.Random.Range(2f, 5f);
+    //        rb.AddForce(force, ForceMode.Impulse);
+    //        StartCoroutine(DeactivateShellAfterTime(bulletShell, 10f));
+
+    //    }
+    //}
+
+    //private IEnumerator DeactivateShellAfterTime(GameObject bulletShell, float time)
+    //{
+    //    yield return new WaitForSeconds(time);
+    //    PoolForShell.Instance.ReturnShellToPool(bulletShell);
+    //}
 }

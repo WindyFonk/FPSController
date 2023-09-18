@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.45053172, g: 0.50052404, b: 0.57510257, a: 1}
+  m_IndirectSpecularColor: {r: 0.45053226, g: 0.5005249, b: 0.5751035, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -880,6 +880,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 36.5, y: -54.3, z: 0}
+--- !u!1 &893832713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2307102634468572750, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+  m_PrefabInstance: {fileID: 3221007402100529648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &893832717
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893832713}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &942795962 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6910946542473126694, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
@@ -1198,6 +1230,11 @@ MonoBehaviour:
   smgModel: {fileID: 1706119240}
   smgAnimator: {fileID: 1943179087}
   player: {fileID: 3221007402100529649}
+--- !u!1 &1315421295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7222324882869737324, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+  m_PrefabInstance: {fileID: 3221007402100529648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1323613058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,6 +2067,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -44.22778
       objectReference: {fileID: 0}
+    - target: {fileID: 6005428943263429364, guid: 46876334e9d206f438712ad9310c3e94, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005428943263429364, guid: 46876334e9d206f438712ad9310c3e94, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6019736842012917400, guid: 46876334e9d206f438712ad9310c3e94, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 6.84172
@@ -2320,6 +2365,8 @@ MonoBehaviour:
   gunPivot: {fileID: 8136700337639904991}
   maxRange: 100
   damage: 10
+  impactForce: 30
+  fireRate: 0.1
   maxBullet: 30
   currentBullet: 24
   bulletSpreadAngle: 0
@@ -2341,6 +2388,22 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 1289359940659992432, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
   m_PrefabInstance: {fileID: 3221007402100529648}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2038258690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315421295}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d4e69911288334c86c2b6ce4e3792b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shellPoint: {fileID: 236298582}
+  shellPrefab: {fileID: 893832713}
+  poolSize: 10
+  shellPool: []
 --- !u!1001 &406406116465561320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2559,12 +2622,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3221007402100529649}
     - target: {fileID: 2498518857177586090, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+      propertyPath: fireRate
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2498518857177586090, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
       propertyPath: maxRange
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2498518857177586090, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
       propertyPath: maxBullet
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2498518857177586090, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+      propertyPath: impactForce
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2498518857177586090, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
       propertyPath: inputManager
@@ -2954,6 +3025,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8207514852295153013, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1311678188}
+    - targetCorrespondingSourceObject: {fileID: 7222324882869737324, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2038258690}
+    - targetCorrespondingSourceObject: {fileID: 2307102634468572750, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 893832717}
   m_SourcePrefab: {fileID: 100100000, guid: 990ba3778954cb94b90558e4a2456921, type: 3}
 --- !u!114 &3221007402100529649 stripped
 MonoBehaviour:

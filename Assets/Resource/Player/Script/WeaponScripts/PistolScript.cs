@@ -39,9 +39,15 @@ public class PistolScript : MonoBehaviour
 
     public PlayerController player;
 
+
+    public float fireRate;
+    private float fireRateCount;
+    private bool readyToFire = true;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        fireRateCount = fireRate;
     }
 
     public bool canReload()
@@ -62,27 +68,48 @@ public class PistolScript : MonoBehaviour
     {
         animator.SetFloat("Speed", Mathf.Abs(player.currentVelocity.y));
 
+
         animator.SetInteger("Bullet", currentBullet);
         _camera.fieldOfView = fov;
 
         UseWeapon();
         AimDownSight();
 
+        Shoot();
+
+    }
+
+    private void Shoot()
+    {
+        if (currentBullet <= 0) return;
+
+        if (inputManager.Shoot && readyToFire)
+        {
+            animator.Play("Shoot");
+            readyToFire = false;
+        }
+
+
+        if (!readyToFire)
+        {
+            fireRateCount -= Time.deltaTime;
+        }
+
+        if (fireRateCount<=0 || !inputManager.Shoot)
+        {
+            fireRateCount = fireRate;
+            readyToFire = true;
+        }
     }
 
     private void UseWeapon()
     {
-        if (inputManager.Shoot)
-        {
-            StartCoroutine(Weapon("Shoot"));
-        }
-
-        else if (inputManager.Knife)
+        if (inputManager.Knife)
         {
             StartCoroutine(Weapon("Knife"));
         }
 
-        if (inputManager.Reload)
+        if (inputManager.Reload && currentBullet<maxBullet)
         {
             StartCoroutine(Weapon("Reload"));
         }

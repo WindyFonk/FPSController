@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SeWeap.unity
+    guid: 939a8049eb6bcf84f9f355bde537767d
   m_configObjects: {}

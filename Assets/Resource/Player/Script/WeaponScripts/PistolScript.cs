@@ -19,7 +19,7 @@ public class PistolScript : MonoBehaviour
 
     public float bulletSpreadAngle;
 
-    public ParticleSystem muzzleFlash;
+    public ParticleSystem muzzleFlash,smoke;
     public GameObject impactEffect;
 
     public LayerMask hitLayer;
@@ -38,6 +38,7 @@ public class PistolScript : MonoBehaviour
     public Animator modelAnimator;
 
     public PlayerController player;
+    public Recoil recoil;
 
 
     public float fireRate;
@@ -66,9 +67,9 @@ public class PistolScript : MonoBehaviour
 
     private void Update()
     {
+        if (!this.enabled) return;
+
         animator.SetFloat("Speed", Mathf.Abs(player.currentVelocity.y));
-
-
         animator.SetInteger("Bullet", currentBullet);
         _camera.fieldOfView = fov;
 
@@ -87,6 +88,7 @@ public class PistolScript : MonoBehaviour
         {
             animator.Play("Shoot");
             readyToFire = false;
+            recoil.RecoilShoot();
         }
 
 
@@ -172,6 +174,7 @@ public class PistolScript : MonoBehaviour
         if (currentBullet > 0)
         {
             muzzleFlash.Play();
+            smoke.Play();
             currentBullet--;
 
             // Bắn một Raycast từ vị trí camera
